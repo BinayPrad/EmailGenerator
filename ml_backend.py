@@ -2,7 +2,7 @@ import openai
 
 class ml_backend:
         
-    openai.api_key = st.secrets['YOUR-API-KEY-HERE']
+    openai.api_key = 'YOUR-API-KEY-HERE'
 
     def generate_email(self, userPrompt ="Write me a professionally sounding email", start="Dear"):
         """Returns a generated an email using GPT3 with a certain prompt and starting sentence"""
