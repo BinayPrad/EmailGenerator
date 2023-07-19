@@ -42,3 +42,5 @@ with st.form(key="form"):
         url = "https://mail.google.com/mail/?view=cm&fs=1&to=&su=&body=" + backend.replace_spaces_with_pluses(start + output)
 
         st.markdown("[Click me to send the email]({})".format(url))
+
+        st.markdown("[Click me to send the email]({})".format(url))
