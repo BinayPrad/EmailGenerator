@@ -1,26 +1,44 @@
-import streamlit as st
 import openai
-question=st.text_area("Input the Email context Here")
-button=st.button("Generate")
+import streamlit as st
+from ml_backend import ml_backend
 
-openai.api_key = st.secrets("OPENAI_API_KEY")
-def response1(self, userPrompt ="Write me a professionally sounding email", start="Dear"):
+st.title("Automated Email Generator App")
 
-        response = openai.Completion.create(
-        engine="davinci",
-        prompt=userPrompt + "\n\n" + start,
-        temperature=0.71,
-        max_tokens=150,
-        top_p=1,
-        frequency_penalty=0.36,
-        presence_penalty=0.75
-        )
-        return response.get("choices")[0]['text']
+coder = '<h1 style="font-family:Times-New-Roman; color:Red ; font-size: 20px;">by Binay Pradhan</h1>'
+st.markdown(coder,unsafe_allow_html=True)
 
-    def replace_spaces_with_pluses(self, sample):
-        """Returns a string with each space being replaced with a plus so the email hyperlink can be formatted properly"""
-        changed = list(sample)
-        for i, c in enumerate(changed):
-            if(c == ' ' or c =='  ' or c =='   ' or c=='\n' or c=='\n\n'):
-                changed[i] = '+'
-        return ''.join(changed)
+st.title("Generate Email")
+
+backend = ml_backend()
+
+with st.form(key="form"):
+    prompt = st.text_input("Describe the Kind of Email you want to be written.")
+    st.text(f"(Example: Write me a professional sounding email to my boss)")
+
+    start = st.text_input("Begin writing the first few or several words of your email:")
+
+    slider = st.slider("How many characters do you want your email to be? ", min_value=64, max_value=750)
+    st.text("(A typical email is usually 100-500 characters)")
+
+    submit_button = st.form_submit_button(label='Generate Email')
+
+    if submit_button:
+        with st.spinner("Generating Email..."):
+            output = backend.generate_email(prompt, start)
+        st.markdown("# Email Output:")
+        st.subheader(start + output)
+
+        st.markdown("____")
+
+        st.subheader("You can press the Generate Email Button again if you're unhappy with the model's output")
+
+        st.markdown("____")
+
+        st.markdown("# Send Your Email Now")
+
+        
+        # st.subheader("Otherwise:")
+        # st.text(start + output)
+        url = "https://mail.google.com/mail/?view=cm&fs=1&to=&su=&body=" + backend.replace_spaces_with_pluses(start + output)
+
+        st.markdown("[Click me to send the email]({})".format(url))
