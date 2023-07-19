@@ -2,7 +2,7 @@ import openai
 
 class ml_backend:
         
-    openai_api_key = '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'
+    openai_api_key = "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"
 
     def generate_email(self, userPrompt ="Write me a professionally sounding email", start="Dear"):
         
